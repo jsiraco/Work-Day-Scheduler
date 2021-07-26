@@ -1,107 +1,76 @@
+const blockContainer = $("#timeblock-container");
 const currentDay = $("#currentDay");
-const currentTime = $(moment().format("ha"));
-const editTask = $(".editTask").attr("contentEditable", "true");
-const saveBtn = $(".saveBtn");
+let task = "New Task";
+let testCount = 1;
 
-const nineAm = $("#9am");
-const tenAm = $("#10am");
-const elevenAm = $("#11am");
-const twelvePm = $("#12pm");
-const onePm = $("#1pm");
-const twoPm = $("#2pm");
-const threePm = $("#3pm");
-const fourPm = $("#4pm");
-const fivePm = $("#5pm");
-
-const workHour = $(".work-hour");
-
+const workHrs = [
+    "09",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17"
+]
 
 let today = moment();
-$(currentDay).text(today.format("[Today is] dddd, MMM Do YYYY"));
+$(currentDay).text(today.format("[Today is] dddd, MMM Do YYYY HH:MMa"));
 
-function checkHour(time) {
-    if (time.text() === currentTime) {
-        time.addClass("present");
-    } else if (time.text() > currentTime) {
-        time.addClass("future");
-    } else {
-        time.addClass("past");
-    }
-}
 
 function init() {
-    let storedTasks = JSON.parse(localStorage.getItem("todos"));
-
-    if (storedTasks !== null) {
-        task = storedTasks;
-    }
-
-
-    checkHour(workHour);
-    checkHour(nineAm);
-    checkHour(tenAm);
-    checkHour(elevenAm);
-    checkHour(twelvePm);
-    checkHour(onePm);
-    checkHour(twoPm);
-    checkHour(threePm);
-    checkHour(fourPm);
-    checkHour(fivePm);
+    buildList();
 }
 
-function saveTaskNine() {
-    task = editTask.text();
-    localStorage.setItem("todo", JSON.stringify(task));
-    console.log(task);
+function getTime() {
+
 }
-saveBtn.on("click", function () {
-    console.log("Hello");
-    saveBtn.on("click", saveTaskNine());
-})
 
-function saveTaskTen() {
-        taskText = task.text();
-        localStorage.setItem("todo", task);
+function buildList() {
+    for (let i = 0; i < workHrs.length; i++) {
+        let storedTasks = JSON.parse(localStorage.getItem(`todos${[i]}`));
+
+        if (storedTasks !== null) {
+            task = storedTasks;
+        }
+
+        let workHour = $("<div id='workHour' class='row hour'>");
+        let taskField = $("<div>").attr("contentEditable", "true").text(task).addClass("taskInput");
+        let saveBtn = $("<button type='submit' class='saveBtn'>").text("💾");
+        taskField.append("<span class='taskInput'></span>");
+
+        workHour.text(workHrs[i]);
+
+        workHour.append(saveBtn);
+        workHour.append(taskField);
+
+
+        $(saveBtn).on("click", function (event) {
+            event.stopPropagation();
+            newTask = taskField.text();
+            localStorage.setItem(`todos${[i]}`, JSON.stringify(newTask));
+            console.log(newTask);
+            return newTask;
+        })
+
+
+        blockContainer.append(workHour);
+
+        if (workHrs[i] === moment().format("HH")) {
+            workHour.addClass("present");
+        } else if (workHrs[i] > moment().format("HH")) {
+            workHour.addClass("future");
+        } else if (workHrs[i] < moment().format("HH")) {
+            workHour.addClass("past");
+        } else {
+            return;
+        }
     }
 
-function saveTaskEleven() {
-        taskText = task.text();
-        localStorage.setItem("todo", task);
-    }
-
-function saveTaskTwelve() {
-        taskText = task.text();
-        localStorage.setItem("todo", task);
-    }
-
-function saveTaskOne() {
-        taskText = task.text();
-        localStorage.setItem("todo", task);
-    }
-
-function saveTaskTwo() {
-        taskText = task.text();
-        localStorage.setItem("todo", task);
-    }
-
-function saveTaskThree() {
-        taskText = task.text();
-        localStorage.setItem("todo", task);
-    }
-
-function saveTaskFour() {
-        taskText = task.text();
-        localStorage.setItem("todo", task);
-    }
-
-function saveTaskFive() {
-        taskText = task.text();
-        localStorage.setItem("todo", task);
-    }
+}
 
 
 init();
 
-for (let i = 0; i < 8; i++) {
-    console.log(i);
-}
+
