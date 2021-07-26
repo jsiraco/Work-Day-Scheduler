@@ -1,77 +1,107 @@
-const blockContainer = $("#timeblock-container");
 const currentDay = $("#currentDay");
+const currentTime = $(moment().format("ha"));
+const editTask = $(".editTask").attr("contentEditable", "true");
+const saveBtn = $(".saveBtn");
 
-const workHrs = [
-    "9am",
-    "10am",
-    "11am",
-    "12pm",
-    "1pm",
-    "2pm",
-    "3pm",
-    "4pm",
-    "5pm"  
-]
+const nineAm = $("#9am");
+const tenAm = $("#10am");
+const elevenAm = $("#11am");
+const twelvePm = $("#12pm");
+const onePm = $("#1pm");
+const twoPm = $("#2pm");
+const threePm = $("#3pm");
+const fourPm = $("#4pm");
+const fivePm = $("#5pm");
+
+const workHour = $(".work-hour");
+
 
 let today = moment();
 $(currentDay).text(today.format("[Today is] dddd, MMM Do YYYY"));
 
+function checkHour(time) {
+    if (time.text() === currentTime) {
+        time.addClass("present");
+    } else if (time.text() > currentTime) {
+        time.addClass("future");
+    } else {
+        time.addClass("past");
+    }
+}
 
 function init() {
-    //getTime();
-    buildList();
-   // getTasks();
-}
+    let storedTasks = JSON.parse(localStorage.getItem("todos"));
 
-function getTime() {
-
-}
-
-function getTasks() {
-
-}
-
-function setTasks() {
-
-}
-
-function buildList() {
-    for (let i = 0; i < workHrs.length; i++) {
-        let workHour = $("<div>");
-        let taskField = $("<div>");
-        let addTask = $("<form>");
-        addTask.append('<input type="text" id="taskId">')
-        addTask.append('<input type="submit" value="💾" class="saveBtn">')
-
-        workHour.addClass("row");
-        workHour.addClass("hour");
-        workHour.addClass("p");
-        workHour.text(workHrs[i]);
-
-        taskField.append(addTask);
-        workHour.append(taskField);
-        blockContainer.append(workHour);
-
-        if (workHrs[i] === moment().format("ha")) {
-            workHour.addClass("present");
-        } else if (workHrs[i] > moment().format("ha")){
-            workHour.addClass("future");
-        } else if (workHrs[i] < moment().format("ha")) {
-            workHour.addClass("past");
-        } else {
-            return;
-        }
+    if (storedTasks !== null) {
+        task = storedTasks;
     }
 
-    console.log(moment().format("ha"));
+
+    checkHour(workHour);
+    checkHour(nineAm);
+    checkHour(tenAm);
+    checkHour(elevenAm);
+    checkHour(twelvePm);
+    checkHour(onePm);
+    checkHour(twoPm);
+    checkHour(threePm);
+    checkHour(fourPm);
+    checkHour(fivePm);
 }
 
-function addTask() {
-
+function saveTaskNine() {
+    task = editTask.text();
+    localStorage.setItem("todo", JSON.stringify(task));
+    console.log(task);
 }
+saveBtn.on("click", function () {
+    console.log("Hello");
+    saveBtn.on("click", saveTaskNine());
+})
 
-function removeTask() {
+function saveTaskTen() {
+        taskText = task.text();
+        localStorage.setItem("todo", task);
+    }
 
-}
+function saveTaskEleven() {
+        taskText = task.text();
+        localStorage.setItem("todo", task);
+    }
+
+function saveTaskTwelve() {
+        taskText = task.text();
+        localStorage.setItem("todo", task);
+    }
+
+function saveTaskOne() {
+        taskText = task.text();
+        localStorage.setItem("todo", task);
+    }
+
+function saveTaskTwo() {
+        taskText = task.text();
+        localStorage.setItem("todo", task);
+    }
+
+function saveTaskThree() {
+        taskText = task.text();
+        localStorage.setItem("todo", task);
+    }
+
+function saveTaskFour() {
+        taskText = task.text();
+        localStorage.setItem("todo", task);
+    }
+
+function saveTaskFive() {
+        taskText = task.text();
+        localStorage.setItem("todo", task);
+    }
+
 
 init();
+
+for (let i = 0; i < 8; i++) {
+    console.log(i);
+}
